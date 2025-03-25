@@ -3,7 +3,8 @@ from .models import CustomUser
 
 class RegistrationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(max_length=128, min_length=4, write_only=True)
-
+    username = None
+    
     class Meta:
         model = CustomUser
         fields = ['email', 'password']

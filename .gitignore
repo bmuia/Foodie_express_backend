@@ -2,8 +2,9 @@
 
 *venv
 
-**migrations
-/!**__init__.py
+**/migrations/
+
+
 
 .vscode
 

@@ -24,13 +24,14 @@ class CustomUserManager(BaseUserManager):
         return self.create_user(email, password, **extra_fields)
 
 class CustomUser(AbstractUser):
-    username = None
+    username = models.CharField(max_length=150, unique=True, null=True, blank=True)  # Optional username field
     email = models.EmailField(unique=True)
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ['username']  # This makes the username optional but still keeps compatibility.
 
     objects = CustomUserManager()
 
     def __str__(self):
         return self.email
+
