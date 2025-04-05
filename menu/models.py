@@ -57,7 +57,7 @@ class Product(models.Model):
             raise ValidationError("A product with this title already exists in this category.")
 
 class Image(models.Model):
-    image = models.ImageField(upload_to='images/')
+    image = models.ImageField(upload_to='uploads/images/')
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='product_images', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -70,14 +70,13 @@ class Image(models.Model):
 
     def clean(self):
         img = PILImage.open(self.image)
-        
+
         if self.image.size > 20 * 1024 * 1024:  # 20MB
             raise ValidationError("Image size cannot exceed 20MB.")
         
-  
         if img.format not in ['JPEG', 'PNG']:
             raise ValidationError("Image format must be JPEG or PNG.")
         
-
+        # Check if this image already exists for the product
         if Image.objects.filter(image=self.image, product=self.product).exists():
             raise ValidationError("This image has already been uploaded for this product.")

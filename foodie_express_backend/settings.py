@@ -16,6 +16,7 @@ from dotenv import load_dotenv
 load_dotenv()
 from datetime import timedelta
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -27,7 +28,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG')
+DEBUG = os.environ.get('DEBUG') == 'True'
+
 
 ALLOWED_HOST = []
 
@@ -48,6 +50,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'corsheaders',
     'django_extensions',
+    'storages',
     'menu',
 ]
 
@@ -157,3 +160,17 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+from google.oauth2 import service_account
+GSA_CREDENTIALS = service_account.Credentials.from_service_account_file(
+    os.path.join(BASE_DIR, 'credentials.json'),
+)
+
+DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+GS_PROJECT_ID = 'foodie-express-454720'
+GS_BUCKET_NAME = 'foodie_express'
+# MEDIA_ROOT = 'media/'
+UPLOAD_ROOT = 'media/uploads/'
+
+MEDIA_URL = f'https://storage.googleapis.com/{GS_BUCKET_NAME}/'  
+
+GS_FILE_OVERWRITE = False
